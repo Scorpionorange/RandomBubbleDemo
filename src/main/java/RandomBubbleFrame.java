@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -34,11 +35,14 @@ class RandomBubbleComponent extends JComponent {
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
 
-        drawRectangle2D(g2);
+        // drawRectangle2D(g2);
 
         for(int i = 0; i < 10; i++){
-            drawRandomCircle2D(g2);
+            // drawRandomCircle2D(g2);
         }
+
+        //drawLine2D(g2, 100, 100, 300, 400);
+        drawRegularPolygon(g2, 300, 300, 100, 5);
     }
 
     public void drawRectangle2D(Graphics2D g2){
@@ -63,6 +67,43 @@ class RandomBubbleComponent extends JComponent {
         Ellipse2D circle = new Ellipse2D.Double();
         circle.setFrameFromCenter(centerX, centerY, centerX + radius, centerY + radius);
         g2.draw(circle);
+    }
+
+    public void drawLine2D(Graphics2D g2, double startX, double startY, double endX, double endY){
+        // draw a line from start(X, Y) to end(X, Y)
+        Line2D line2D = new Line2D.Double(startX, startY, endX, endY);
+        g2.draw(line2D);
+    }
+
+    public void drawRegularPolygon(Graphics2D g2,
+                                   double centerX, double centerY, double radius, int vertex){
+        // draw a polygon that center(X, Y), radius and with vertex
+        double[] vertexX = new double[vertex];
+        double[] vertexY = new double[vertex];
+        vertexX[0] = centerX;
+        vertexY[0] = centerY - radius;
+        for(int i = 1; i < vertex; i++){
+            vertexX[i] = nextPoint((2 * Math.PI) / vertex * (i + 1),
+                    vertexX[i - 1], vertexY[i - 1], radius).x;
+            vertexY[i] = nextPoint((2 * Math.PI) / vertex * (i + 1),
+                    vertexX[i - 1], vertexY[i - 1], radius).y;
+        }
+        for(int i = 0; i < vertex ; i++){
+            if(i < vertex - 1){
+                drawLine2D(g2, vertexX[i], vertexY[i], vertexX[i + 1], vertexY[i + 1]);
+            }
+            else {
+                drawLine2D(g2, vertexX[i], vertexY[i], vertexX[0], vertexY[0]);
+            }
+        }
+    }
+
+    public Point nextPoint(double arc, double vertexX, double vertexY, double radius){
+        // arc为弧度，在顶点出建立直角坐标系，用radius和arc确定下一个点的坐标
+        Point point = new Point();
+        point.x = (int) (vertexX - radius * Math.sin(arc));
+        point.y = (int) (vertexY + radius - radius * Math.cos(arc));
+        return point;
     }
 
     public Dimension getPreferredSize(){
