@@ -82,12 +82,7 @@ class RandomBubbleComponent extends JComponent {
         double[] vertexY = new double[vertex];
         vertexX[0] = centerX;
         vertexY[0] = centerY - radius;
-        for(int i = 1; i < vertex; i++){
-            vertexX[i] = nextPoint((2 * Math.PI) / vertex * (i + 1),
-                    vertexX[i - 1], vertexY[i - 1], radius).x;
-            vertexY[i] = nextPoint((2 * Math.PI) / vertex * (i + 1),
-                    vertexX[i - 1], vertexY[i - 1], radius).y;
-        }
+        for(int i = 1; i < vertex; i++){}
         for(int i = 0; i < vertex ; i++){
             if(i < vertex - 1){
                 drawLine2D(g2, vertexX[i], vertexY[i], vertexX[i + 1], vertexY[i + 1]);
@@ -98,11 +93,15 @@ class RandomBubbleComponent extends JComponent {
         }
     }
 
-    public Point nextPoint(double arc, double vertexX, double vertexY, double radius){
+    public Point nextPoint(double arc,
+                           double centerX, double centerY,
+                           double firstX, double firstY,
+                           double radius){
         // arc为弧度，在顶点出建立直角坐标系，用radius和arc确定下一个点的坐标
         Point point = new Point();
-        point.x = (int) (vertexX - radius * Math.sin(arc));
-        point.y = (int) (vertexY + radius - radius * Math.cos(arc));
+
+        // point.x = (int) (vertexX - radius * Math.sin(arc));
+        // point.y = (int) (vertexY + radius - radius * Math.cos(arc));
         return point;
     }
 
