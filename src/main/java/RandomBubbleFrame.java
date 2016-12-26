@@ -93,10 +93,9 @@ class RandomBubbleComponent extends JComponent {
         }
     }
 
-    public Point nextPoint(double arc,
-                           double centerX, double centerY,
+    public Point nextPoint(double centerX, double centerY,
                            double firstX, double firstY,
-                           double radius){
+                           double arc, double radius){
         // arc为弧度，在顶点出建立直角坐标系，用radius和arc确定下一个点的坐标
         Point point = new Point();
 
