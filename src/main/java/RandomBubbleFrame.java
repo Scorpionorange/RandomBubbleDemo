@@ -76,32 +76,34 @@ class RandomBubbleComponent extends JComponent {
     }
 
     public void drawRegularPolygon(Graphics2D g2,
-                                   double centerX, double centerY, double radius, int vertex){
+                                   double centerX, double centerY,
+                                   double radius, int vertex){
         // draw a polygon that center(X, Y), radius and with vertex
-        double[] vertexX = new double[vertex];
-        double[] vertexY = new double[vertex];
-        vertexX[0] = centerX;
-        vertexY[0] = centerY - radius;
-        for(int i = 1; i < vertex; i++){}
-        for(int i = 0; i < vertex ; i++){
-            if(i < vertex - 1){
-                drawLine2D(g2, vertexX[i], vertexY[i], vertexX[i + 1], vertexY[i + 1]);
-            }
-            else {
-                drawLine2D(g2, vertexX[i], vertexY[i], vertexX[0], vertexY[0]);
-            }
+        Point center = new Point();
+        center.setLocation(centerX, centerY);
+        Point[] vertexs = new Point[vertex];
+        vertexs[0].setLocation(center.getX(), center.getY() + radius);
+
+        for(int i = 1; i < vertexs.length; i++){
+            vertexs[i] = nextPoint(center, vertexs[i - 1], Math.PI / vertex, radius);
+        }
+
+        for(int i = 0; i < vertex; i++){
+            drawLine2D(g2,
+                    vertexs[i].getX(), vertexs[i].getY(),
+                    vertexs[i + 1].getX(), vertexs[i + 1].getY());
         }
     }
 
-    public Point nextPoint(double centerX, double centerY,
-                           double firstX, double firstY,
-                           double arc, double radius){
-        // arc为弧度，在顶点出建立直角坐标系，用radius和arc确定下一个点的坐标
-        Point point = new Point();
-
-        // point.x = (int) (vertexX - radius * Math.sin(arc));
-        // point.y = (int) (vertexY + radius - radius * Math.cos(arc));
-        return point;
+    public Point nextPoint(Point center, Point first, double arcFirstToSecond, double radius){
+        // arc为弧度，在已知圆心、第一点、第一第二点的夹角的前提下，用radius和arc确定第二点的坐标
+        Point second = new Point();
+        double arcFirst = Math.asin((first.getY() - center.getY()) / radius);
+        double arcSecond = arcFirst - arcFirstToSecond;
+        double secondX = center.getX() + radius * Math.cos(arcSecond);
+        double secondY = center.getY() + radius * Math.sin(arcSecond);
+        second.setLocation(secondX, secondY);
+        return second;
     }
 
     public Dimension getPreferredSize(){
