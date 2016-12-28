@@ -41,8 +41,8 @@ class RandomBubbleComponent extends JComponent {
             // drawRandomCircle2D(g2);
         }
 
-        //drawLine2D(g2, 100, 100, 300, 400);
-        drawRegularPolygon(g2, 300, 300, 100, 5);
+        // drawLine2D(g2, 100, 100, 300, 400);
+        drawRegularPolygon(g2, 300, 300, 100, 6);
     }
 
     public void drawRectangle2D(Graphics2D g2){
@@ -79,29 +79,27 @@ class RandomBubbleComponent extends JComponent {
                                    double centerX, double centerY,
                                    double radius, int vertex){
         // draw a polygon that center(X, Y), radius and with vertex
-        Point center = new Point();
-        center.setLocation(centerX, centerY);
+        Point center = new Point((int)centerX, (int)centerY);
         Point[] vertexs = new Point[vertex];
-        vertexs[0].setLocation(center.getX(), center.getY() + radius);
+        vertexs[0] = new Point((int) center.x, (int)(center.y - radius));
 
         for(int i = 1; i < vertexs.length; i++){
-            vertexs[i] = nextPoint(center, vertexs[i - 1], Math.PI / vertex, radius);
+            vertexs[i] = nextPoint(center, vertexs[i - 1], Math.PI * 2 / vertex, radius);
         }
 
-        for(int i = 0; i < vertex; i++){
-            drawLine2D(g2,
-                    vertexs[i].getX(), vertexs[i].getY(),
-                    vertexs[i + 1].getX(), vertexs[i + 1].getY());
+        for(int i = 1; i < vertexs.length; i++){
+            drawLine2D(g2, vertexs[i - 1].x, vertexs[i - 1].y, vertexs[i].x, vertexs[i].y);
         }
+        drawLine2D(g2, vertexs[vertexs.length - 1].x, vertexs[vertexs.length - 1].y, vertexs[0].x, vertexs[0].y);
     }
 
     public Point nextPoint(Point center, Point first, double arcFirstToSecond, double radius){
         // arc为弧度，在已知圆心、第一点、第一第二点的夹角的前提下，用radius和arc确定第二点的坐标
         Point second = new Point();
-        double arcFirst = Math.asin((first.getY() - center.getY()) / radius);
-        double arcSecond = arcFirst - arcFirstToSecond;
-        double secondX = center.getX() + radius * Math.cos(arcSecond);
-        double secondY = center.getY() + radius * Math.sin(arcSecond);
+        double arcFirst = Math.asin((first.y - center.y) / radius);
+        double arcSecond = arcFirst + arcFirstToSecond;
+        double secondX = center.x + radius * Math.cos(arcSecond);
+        double secondY = center.y + radius * Math.sin(arcSecond);
         second.setLocation(secondX, secondY);
         return second;
     }
