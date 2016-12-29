@@ -9,8 +9,8 @@ import java.awt.geom.Rectangle2D;
  * A frame that contains a panel with drawings.
  */
 public class RandomBubbleFrame extends JFrame {
-    public static final int DEFAULT_WIDTH = 800;
-    public static final int DEFAULT_HEIGHT = 600;
+    public static final int DEFAULT_WIDTH = 1920;
+    public static final int DEFAULT_HEIGHT = 1080;
 
     public RandomBubbleFrame(){
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -35,14 +35,14 @@ class RandomBubbleComponent extends JComponent {
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
 
-        // drawRectangle2D(g2);
+        drawRectangle2D(g2);
 
         for(int i = 0; i < 10; i++){
-            // drawRandomCircle2D(g2);
+            drawRandomCircle2D(g2);
         }
 
         // drawLine2D(g2, 100, 100, 300, 400);
-        drawRegularPolygon(g2, 300, 300, 100, 6);
+        drawRegularPolygon(g2, 500, 500, 250, 8);
     }
 
     public void drawRectangle2D(Graphics2D g2){
@@ -84,13 +84,29 @@ class RandomBubbleComponent extends JComponent {
         vertexs[0] = new Point((int) center.x, (int)(center.y - radius));
 
         for(int i = 1; i < vertexs.length; i++){
-            vertexs[i] = nextPoint(center, vertexs[i - 1], Math.PI * 2 / vertex, radius);
-        }
-
-        for(int i = 1; i < vertexs.length; i++){
+            vertexs[i] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * i, radius);
             drawLine2D(g2, vertexs[i - 1].x, vertexs[i - 1].y, vertexs[i].x, vertexs[i].y);
         }
+
+        /*
+        vertexs[1] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 1, radius);
+        vertexs[2] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 2, radius);
+        vertexs[3] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 3, radius);
+        vertexs[4] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 4, radius);
+        vertexs[5] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 5, radius);
+        */
+
+        /*
+        drawLine2D(g2, vertexs[0].x, vertexs[0].y, vertexs[1].x, vertexs[1].y);
+        drawLine2D(g2, vertexs[1].x, vertexs[1].y, vertexs[2].x, vertexs[2].y);
+        drawLine2D(g2, vertexs[2].x, vertexs[2].y, vertexs[3].x, vertexs[3].y);
+        drawLine2D(g2, vertexs[3].x, vertexs[3].y, vertexs[4].x, vertexs[4].y);
+        drawLine2D(g2, vertexs[4].x, vertexs[4].y, vertexs[5].x, vertexs[5].y);
+        drawLine2D(g2, vertexs[5].x, vertexs[5].y, vertexs[0].x, vertexs[0].y);
+        */
+
         drawLine2D(g2, vertexs[vertexs.length - 1].x, vertexs[vertexs.length - 1].y, vertexs[0].x, vertexs[0].y);
+
     }
 
     public Point nextPoint(Point center, Point first, double arcFirstToSecond, double radius){
