@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  * Created by ScorpionOrange on 2016/12/09.
@@ -38,11 +39,12 @@ class RandomBubbleComponent extends JComponent {
         drawRectangle2D(g2);
 
         for(int i = 0; i < 10; i++){
-            drawRandomCircle2D(g2);
+            //drawRandomCircle2D(g2);
         }
 
         // drawLine2D(g2, 100, 100, 300, 400);
         drawRegularPolygon(g2, 500, 500, 250, 8);
+        drawRoundRect(g2, 600, 600, 400, 300, 50);
     }
 
     public void drawRectangle2D(Graphics2D g2){
@@ -52,8 +54,7 @@ class RandomBubbleComponent extends JComponent {
         double width = DEFAULT_WIDTH;
         double heigth = DEFAULT_HEIGHT;
 
-        Rectangle2D rectangle2D = new Rectangle2D.Double(leftX, topY, width, heigth);
-        g2.draw(rectangle2D);
+        g2.draw(new Rectangle2D.Double(leftX, topY, width, heigth));
     }
 
     public void drawRandomCircle2D(Graphics2D g2){
@@ -71,8 +72,7 @@ class RandomBubbleComponent extends JComponent {
 
     public void drawLine2D(Graphics2D g2, double startX, double startY, double endX, double endY){
         // draw a line from start(X, Y) to end(X, Y)
-        Line2D line2D = new Line2D.Double(startX, startY, endX, endY);
-        g2.draw(line2D);
+        g2.draw(new Line2D.Double(startX, startY, endX, endY));
     }
 
     public void drawRegularPolygon(Graphics2D g2,
@@ -87,26 +87,9 @@ class RandomBubbleComponent extends JComponent {
             vertexs[i] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * i, radius);
             drawLine2D(g2, vertexs[i - 1].x, vertexs[i - 1].y, vertexs[i].x, vertexs[i].y);
         }
-
-        /*
-        vertexs[1] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 1, radius);
-        vertexs[2] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 2, radius);
-        vertexs[3] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 3, radius);
-        vertexs[4] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 4, radius);
-        vertexs[5] = nextPoint(center, vertexs[0], Math.PI * 2 / vertex * 5, radius);
-        */
-
-        /*
-        drawLine2D(g2, vertexs[0].x, vertexs[0].y, vertexs[1].x, vertexs[1].y);
-        drawLine2D(g2, vertexs[1].x, vertexs[1].y, vertexs[2].x, vertexs[2].y);
-        drawLine2D(g2, vertexs[2].x, vertexs[2].y, vertexs[3].x, vertexs[3].y);
-        drawLine2D(g2, vertexs[3].x, vertexs[3].y, vertexs[4].x, vertexs[4].y);
-        drawLine2D(g2, vertexs[4].x, vertexs[4].y, vertexs[5].x, vertexs[5].y);
-        drawLine2D(g2, vertexs[5].x, vertexs[5].y, vertexs[0].x, vertexs[0].y);
-        */
-
-        drawLine2D(g2, vertexs[vertexs.length - 1].x, vertexs[vertexs.length - 1].y, vertexs[0].x, vertexs[0].y);
-
+        drawLine2D(g2,
+                vertexs[vertexs.length - 1].x, vertexs[vertexs.length - 1].y,
+                vertexs[0].x, vertexs[0].y);
     }
 
     public Point nextPoint(Point center, Point first, double arcFirstToSecond, double radius){
@@ -120,17 +103,16 @@ class RandomBubbleComponent extends JComponent {
         return second;
     }
 
-    public void drawRoundRect(Graphics2D g2,
-                              double topLeftX, double topLeftY,
+    public void drawRoundRect(Graphics2D g2, double topLeftX, double topLeftY,
                               int length, int width, double filletRadius){
-        Point topLeft = new Point((int)topLeftX, (int)topLeftY);
-        Point topRight = new Point((int)(topLeftX + length), (int)topLeftY);
-        Point bottonLeft = new Point((int)topLeftX, (int)(topLeftY + width));
-        Point bottonRight = new Point((int)(topLeftX + length), (int)(topLeftY + width));
+        // 圆角矩形：左上角是(20，30)，宽是130，高是100，圆角的长轴是18，短轴是15。
+        // RoundRectangle2D rectRound = new RoundRectangle2D.Double(20,30,130,100,18,15);
+        g2.draw(new RoundRectangle2D.Double(
+                topLeftX, topLeftY, length, width, filletRadius, filletRadius
+        ));
     }
 
     public Dimension getPreferredSize(){
         return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
-
 }
