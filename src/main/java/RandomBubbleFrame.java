@@ -120,6 +120,15 @@ class RandomBubbleComponent extends JComponent {
         return second;
     }
 
+    public void drawRoundRect(Graphics2D g2,
+                              double topLeftX, double topLeftY,
+                              int length, int width, double filletRadius){
+        Point topLeft = new Point((int)topLeftX, (int)topLeftY);
+        Point topRight = new Point((int)(topLeftX + length), (int)topLeftY);
+        Point bottonLeft = new Point((int)topLeftX, (int)(topLeftY + width));
+        Point bottonRight = new Point((int)(topLeftX + length), (int)(topLeftY + width));
+    }
+
     public Dimension getPreferredSize(){
         return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
